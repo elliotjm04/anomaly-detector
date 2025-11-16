@@ -1,0 +1,51 @@
+# =============================================================================
+# config.yaml - Configuration for anomdetec.py
+# Author: Elliot McGeachie
+# License: MIT License
+# Version: 1.1.0
+# Description:
+#   Customizable parameters for the Universal Predictive Maintenance Anomaly 
+#   Detector. Tune these based on your hardware and dataset characteristics 
+#   to optimize performance and accuracy. Defaults are balanced for general use.
+# =============================================================================
+
+# -------------------------- General Parameters -------------------------------
+contamination: 0.05         # Expected proportion of anomalies (0.0 to 0.5)
+chunk_size: 5000            # Rows per CSV chunk; smaller for low-memory systems
+
+# ---------------------- Autoencoder Parameters -------------------------------
+autoencoder_epochs: 50      # Training epochs; higher for better convergence (e.g., 200+ on servers)
+hidden_ratio: 0.25          # Ratio for hidden layer size (0.1 to 0.5); smaller reduces complexity
+dropout: 0.0                # Dropout rate (0.0 to 0.5); add regularization for overfitting
+batch_norm: false           # Enable batch normalization (true/false); stabilizes training
+
+# -------------------- Feature Engineering Parameters -------------------------
+max_lag: 3                  # Max lags for time-shifted features; higher captures longer dependencies
+fft_points: 64              # FFT computation points; higher for finer frequency resolution
+rolling_window: 5           # Window for rolling correlations; larger smooths interactions
+
+# -------------------- Isolation Forest Parameters ----------------------------
+if_n_estimators: [100, 200] # List of n_estimators for grid search
+if_max_samples: ['auto', 0.8] # List of max_samples ratios
+if_max_features: [0.5, 1.0]  # List of max_features ratios
+
+# ------------------------ Explainability Parameters --------------------------
+shap_sample: 100            # Samples for SHAP computation; higher for accuracy, but slower
+
+# ------------------------ Optimization Guidelines ----------------------------
+# For Laptops (Low Resources):
+#   - chunk_size: 1000-5000
+#   - autoencoder_epochs: 20-50
+#   - fft_points: 32-64
+#   - shap_sample: 50-100
+#
+# For Workstations/Servers (High Resources):
+#   - chunk_size: 20000-100000
+#   - autoencoder_epochs: 100-500
+#   - fft_points: 128-512
+#   - shap_sample: 200-500
+#
+# Advanced Tips:
+#   - Increase contamination if your domain expects more anomalies.
+#   - Enable batch_norm and dropout for noisy or large datasets.
+#   - Expand grid search lists for finer hyperparameter tuning.
